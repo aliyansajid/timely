@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct TimelyApp: App {
     @StateObject private var timerManager = TimerManager.shared
-    @NSApplicationDelegateAdaptor(AppDelegate.class) var appDelegate
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         // Menu bar extra for the timer controls

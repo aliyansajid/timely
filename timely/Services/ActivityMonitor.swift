@@ -8,6 +8,7 @@
 import Foundation
 import Cocoa
 import ApplicationServices
+import Combine
 
 class ActivityMonitor: ObservableObject {
     static let shared = ActivityMonitor()
