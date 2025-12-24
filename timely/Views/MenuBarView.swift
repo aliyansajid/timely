@@ -10,6 +10,7 @@ import SwiftUI
 struct MenuBarView: View {
     @EnvironmentObject var timerManager: TimerManager
     @StateObject private var activityMonitor = ActivityMonitor.shared
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(spacing: 0) {
@@ -109,13 +110,8 @@ struct MenuBarView: View {
     }
 
     private func openDashboard() {
+        openWindow(id: "dashboard")
         NSApp.activate(ignoringOtherApps: true)
-        for window in NSApp.windows {
-            if window.title == "Timely Dashboard" {
-                window.makeKeyAndOrderFront(nil)
-                return
-            }
-        }
     }
 
     private func quitApp() {
