@@ -67,7 +67,6 @@ struct AuthenticationView: View {
                             .textFieldStyle(CustomTextFieldStyle())
                             .frame(width: 300)
                             .textContentType(.emailAddress)
-                            .autocapitalization(.none)
 
                         SecureField("Password", text: $password)
                             .textFieldStyle(CustomTextFieldStyle())
