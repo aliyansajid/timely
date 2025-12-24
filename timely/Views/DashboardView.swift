@@ -20,10 +20,10 @@ struct DashboardView: View {
                 }
                 .tag(0)
 
-            // Reports
-            ReportsView()
+            // Analytics with Charts
+            ChartsView()
                 .tabItem {
-                    Label("Reports", systemImage: "chart.bar")
+                    Label("Analytics", systemImage: "chart.bar")
                 }
                 .tag(1)
 

@@ -11,12 +11,37 @@ import SwiftUI
 struct TimelyApp: App {
     @StateObject private var timerManager = TimerManager.shared
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @AppStorage("isAuthenticated") private var isAuthenticated = false
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     var body: some Scene {
+        // Authentication/Onboarding window (shows first)
+        Window("Welcome to Timely", id: "welcome") {
+            if !hasCompletedOnboarding {
+                AuthenticationView(isAuthenticated: $isAuthenticated)
+            }
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
+        .commands {
+            CommandGroup(replacing: .newItem) { }
+        }
+
         // Menu bar extra for the timer controls
         MenuBarExtra("Timely", systemImage: "clock.fill") {
-            MenuBarView()
-                .environmentObject(timerManager)
+            if hasCompletedOnboarding {
+                MenuBarView()
+                    .environmentObject(timerManager)
+            } else {
+                VStack {
+                    Text("Please complete setup first")
+                        .padding()
+                    Button("Open Setup") {
+                        NSApp.activate(ignoringOtherApps: true)
+                    }
+                }
+                .frame(width: 200)
+            }
         }
         .menuBarExtraStyle(.window)
 

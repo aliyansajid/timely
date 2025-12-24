@@ -18,9 +18,9 @@ struct MenuBarView: View {
             VStack(spacing: 8) {
                 Text(timerManager.formattedTime())
                     .font(.system(size: 32, weight: .bold, design: .monospaced))
-                    .foregroundColor(timerManager.isRunning ? .green : .secondary)
+                    .foregroundColor(timerManager.isPaused ? .orange : (timerManager.isRunning ? .green : .secondary))
 
-                Text(timerManager.isRunning ? "Working" : "Idle")
+                Text(timerManager.isPaused ? "Paused" : (timerManager.isRunning ? "Working" : "Idle"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -28,25 +28,44 @@ struct MenuBarView: View {
 
             Divider()
 
-            // Start/Stop button
-            Button(action: {
-                if timerManager.isRunning {
-                    timerManager.stopTimer()
-                } else {
-                    timerManager.startTimer()
+            // Control buttons
+            HStack(spacing: 12) {
+                // Start/Stop button
+                Button(action: {
+                    if timerManager.isRunning || timerManager.isPaused {
+                        timerManager.stopTimer()
+                    } else {
+                        timerManager.startTimer()
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: (timerManager.isRunning || timerManager.isPaused) ? "stop.circle.fill" : "play.circle.fill")
+                        Text((timerManager.isRunning || timerManager.isPaused) ? "Stop" : "Start")
+                            .fontWeight(.medium)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
                 }
-            }) {
-                HStack {
-                    Image(systemName: timerManager.isRunning ? "stop.circle.fill" : "play.circle.fill")
-                        .font(.title2)
-                    Text(timerManager.isRunning ? "Stop Timer" : "Start Timer")
-                        .fontWeight(.medium)
+                .buttonStyle(.borderedProminent)
+                .tint((timerManager.isRunning || timerManager.isPaused) ? .red : .green)
+
+                // Pause/Resume button
+                if timerManager.isRunning || timerManager.isPaused {
+                    Button(action: {
+                        if timerManager.isPaused {
+                            timerManager.resumeTimer()
+                        } else {
+                            timerManager.pauseTimer()
+                        }
+                    }) {
+                        Image(systemName: timerManager.isPaused ? "play.fill" : "pause.fill")
+                            .font(.title3)
+                            .frame(width: 40, height: 40)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.orange)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(timerManager.isRunning ? .red : .green)
             .padding(.horizontal)
             .padding(.vertical, 8)
 

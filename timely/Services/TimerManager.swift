@@ -13,10 +13,13 @@ class TimerManager: ObservableObject {
 
     @Published var currentSession: Session?
     @Published var isRunning: Bool = false
+    @Published var isPaused: Bool = false
     @Published var elapsedTime: TimeInterval = 0
 
     private var timer: Timer?
     private var startTime: Date?
+    private var pauseStartTime: Date?
+    private var totalPausedTime: TimeInterval = 0
 
     private init() {}
 
@@ -26,7 +29,9 @@ class TimerManager: ObservableObject {
         let userId = UserDefaults.standard.string(forKey: "currentUserId") ?? "default_user"
         currentSession = Session(userId: userId)
         isRunning = true
+        isPaused = false
         startTime = Date()
+        totalPausedTime = 0
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.updateElapsedTime()
@@ -65,29 +70,43 @@ class TimerManager: ObservableObject {
     }
 
     func pauseTimer() {
-        guard isRunning else { return }
+        guard isRunning, !isPaused else { return }
 
         timer?.invalidate()
         timer = nil
-        isRunning = false
+        isPaused = true
+        pauseStartTime = Date()
 
-        print("⏸️  Timer paused")
+        // Pause activity monitoring
+        ActivityMonitor.shared.stopMonitoring()
+
+        print("⏸️  Timer paused at \(formattedTime())")
     }
 
     func resumeTimer() {
-        guard !isRunning, currentSession != nil else { return }
+        guard isPaused, currentSession != nil else { return }
 
-        isRunning = true
+        // Calculate paused duration
+        if let pauseStart = pauseStartTime {
+            totalPausedTime += Date().timeIntervalSince(pauseStart)
+        }
+
+        isPaused = false
+        pauseStartTime = nil
+
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.updateElapsedTime()
         }
 
-        print("▶️  Timer resumed")
+        // Resume activity monitoring
+        ActivityMonitor.shared.startMonitoring()
+
+        print("▶️  Timer resumed at \(formattedTime())")
     }
 
     private func updateElapsedTime() {
         guard let start = startTime else { return }
-        elapsedTime = Date().timeIntervalSince(start)
+        elapsedTime = Date().timeIntervalSince(start) - totalPausedTime
 
         // Update current session with activity data
         if var session = currentSession {
