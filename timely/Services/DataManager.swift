@@ -86,7 +86,7 @@ class DataManager {
         timeFormatter.dateFormat = "HH:mm:ss"
 
         guard let sessionId = UUID(uuidString: components[0]),
-              let date = dateFormatter.date(from: components[2]),
+              let _ = dateFormatter.date(from: components[2]),
               let startTime = timeFormatter.date(from: components[3]) else {
             return nil
         }
