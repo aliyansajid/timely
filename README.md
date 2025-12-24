@@ -66,18 +66,28 @@ Timely respects your privacy:
 
 ## Development Status
 
-🚧 **Currently in active development** - Features are being implemented and tested.
+✅ **Core features implemented** - Ready for testing and use!
+
+## Implemented Features
+
+- [x] Core timer functionality with start/stop controls
+- [x] Activity monitoring (keyboard/mouse tracking)
+- [x] CSV data export
+- [x] Dashboard with session tracking
+- [x] Settings and preferences
+- [x] Idle detection
+- [x] Session statistics and productivity percentage
+- [x] Menu bar integration
 
 ## Roadmap
 
-- [ ] Core timer functionality
-- [ ] Activity monitoring (keyboard/mouse)
-- [ ] CSV data export
-- [ ] Dashboard with analytics
-- [ ] Settings and preferences
-- [ ] Break reminders
-- [ ] Reports and charts
+- [ ] Break reminders and notifications
+- [ ] Advanced reports and charts
 - [ ] Session notes and tags
+- [ ] Weekly/monthly analytics
+- [ ] Custom productivity goals
+- [ ] Dark mode support
+- [ ] App icon and branding
 
 ## License
 
