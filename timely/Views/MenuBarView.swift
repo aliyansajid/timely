@@ -86,7 +86,7 @@ struct MenuBarView: View {
 
                 Divider()
 
-                Button(action: openSettings) {
+                SettingsLink {
                     Label("Settings", systemImage: "gearshape")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -116,11 +116,6 @@ struct MenuBarView: View {
                 return
             }
         }
-    }
-
-    private func openSettings() {
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-        NSApp.activate(ignoringOtherApps: true)
     }
 
     private func quitApp() {
